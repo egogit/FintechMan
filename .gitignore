@@ -1,0 +1,22 @@
+# dependencies
+fintechman_be/node_modules/
+fintechman_fe/node_modules/
+fintechman_fe/.pnp
+fintechman_fe.pnp.js
+
+# testing
+fintechman_fe/coverage
+
+# production
+fintechman_fe/build
+
+# misc
+fintechman_fe/.DS_Store
+fintechman_fe/.env.local
+fintechman_fe/.env.development.local
+fintechman_fe/.env.test.local
+fintechman_fe/.env.production.local
+
+fintechman_fe/npm-debug.log*
+fintechman_fe/yarn-debug.log*
+fintechman_fe/yarn-error.log*
