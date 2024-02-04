@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const SideStyle = styled.div`
     background-color: #202020;
-    height: 100%;
+    height: 1000px;
     display: flex;
 `
 
