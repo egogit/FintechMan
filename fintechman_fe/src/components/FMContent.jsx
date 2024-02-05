@@ -9,16 +9,18 @@ function FMContent(props){
 
     const contentRef = useRef();
 
+    const {isOpened} = props.isOpened;
+
     useEffect(() => {
         if (props.isOpened) {
         contentRef.current.style.width = 'calc(100% - 200px)';
         } else {
         contentRef.current.style.width = '100%';
         }
-    }, [props.isOpened]);
+    }, [isOpened]);
 
     return(
-        <ContentStyle ref={contentRef} isOpened={props.isOpened}>hi</ContentStyle>
+        <ContentStyle ref={contentRef} isOpened={isOpened}>hi</ContentStyle>
     )
 }
 

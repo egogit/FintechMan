@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 
-import logo from "../assets/icon/fintechman.png"
+import FMRegister from "./FMRegister";
+import logo from "../assets/icon/fintechman.png";
 
 const LoginForm = styled.form`
     background-color: #303030;
@@ -29,11 +31,32 @@ const SubmitForm = styled.div`
     text-align: right;
 `
 
+const ModalOverlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: ${({ showModal }) => (showModal ? "flex" : "none")};
+    justify-content: center;
+    align-items: center;
+`
+
+const ModalContent = styled.div`
+    background-color: #303030;
+    padding: 20px;
+    border-radius: 5px;
+`
 
 function FMLogin(props){
 
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    const [showModal, setShowModal] = useState(false);
+
+    const baseURL ="http://localhost:4000/api/auth";
+
     const navigate = useNavigate();
 
     const changeId = (e) => {
@@ -45,25 +68,46 @@ function FMLogin(props){
     }
 
     const loginHandler = (e) => {
-        e.preventDefault();  // 관련 내용 기록하기.
+        e.preventDefault();
 
         if(!id){
-            alert('아이디를 입력해주세요.');
+            alert('아이디를 입력해주세요.'); 
         }else if(!password){
             alert('패스워드를 입력해주세요.');
         }else{
-            if(id == 'admin' && password == "1234"){
-                navigate('/');
-            }else{
+            axios.post(baseURL+'/login',{
+                uid: id,
+                password: password
+            }).then((res) => {
+                if (res.data.status === 'success'){
+                    navigate('/');
+                }else{
+                    alert(res.data.msg);
+                }
+            })
+            .catch((err) => {
+                alert(err);
+                console.error(err);
+            })
+            .finally(() => {
                 setId('');
                 setPassword('');
-                alert("해당하는 로그인 정보가 없습니다.");
-            }
+            })
         }
     }
-    
-    const registerHandler = () => {
-    
+
+    const openModal = () => {
+        setShowModal(true);
+    }
+
+    const closeModal = () => {
+        setShowModal(false);
+    }
+
+    const overlayClickHandler = (e) => {
+        if (e.target === e.currentTarget) {
+            closeModal();
+        }
     }
 
     return(
@@ -73,16 +117,22 @@ function FMLogin(props){
             <LoginForm>
                 <h3>로그인</h3>
                 <div>
-                    <LoginInput type="text" placeholder='id' value={id} onChange={changeId} />
+                    <LoginInput type="text" placeholder='id' value={id} maxLength="41" onChange={changeId} />
                     <Blank/>
-                    <LoginInput type="password" placeholder='password' value={password} onChange={changePassword} />
+                    <LoginInput type="password" placeholder='password' value={password} maxLength="16" onChange={changePassword} />
                 </div>
                 <Blank/>
                 <SubmitForm>
                     <input type="submit" value="로그인" onClick={loginHandler}/>
-                    <input type="submit" value="회원가입" onClick={registerHandler}/>
+                    <input type="button" value="회원가입" onClick={openModal}/>
                 </SubmitForm>
             </LoginForm>
+
+            <ModalOverlay showModal={showModal} onClick={overlayClickHandler}>
+                <ModalContent>
+                    <FMRegister closeModal={closeModal} showModal= {showModal} />
+                </ModalContent>
+            </ModalOverlay>
         </>
     )
 
