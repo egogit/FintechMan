@@ -84,14 +84,13 @@ const register = async(req, res) => {
         res.send(err);
         
     }else{
-        const saltRounds = parseInt(process.env.AUTH_SALTROUNDS);
-        const salt = bcrypt.genSaltSync(saltRounds);
-        const encPassword = bcrypt.hashSync(password, salt);
+        const saltRounds = parseInt(process.env.AUTH_SALTROUNDS) || 10;
+        const encPassword = bcrypt.hashSync(password, saltRounds);
       
         try{
             conn = await pool.getConnection();
             const result = await conn.query(
-                'INSERT INTO WEB_USER_INFO(uid, salt, password) VALUES(?, ?, ?)',[uid, salt, encPassword]);
+                'INSERT INTO WEB_USER_INFO(uid, password) VALUES(?, ?)',[uid, encPassword]);
                 
             if(result){
                 resMsg = JSON.stringify({'status': 'success', 'msg': '회원가입을 성공하였습니다.'});

@@ -11,6 +11,7 @@ fintechman_fe/coverage
 fintechman_fe/build
 
 # misc
+fintechman_be/.env
 fintechman_fe/.DS_Store
 fintechman_fe/.env.local
 fintechman_fe/.env.development.local
