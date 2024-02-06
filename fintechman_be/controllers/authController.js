@@ -16,8 +16,6 @@ const checkValidation = async (uid, password) => {
     return errmsg;
 }
 
-// 중복 ID 체크 api 만들기 
-
 const login = async (req, res) => {
     let conn;
     let resMsg="";
@@ -116,7 +114,52 @@ const register = async(req, res) => {
     }
 }
 
+const checkDuplicateId = async(req, res) => {
+    let conn;
+    let resMsg="";
+    
+    const uid = req.body.uid;
+    
+    const errmsg = await checkValidation(uid, "default");
+    
+    
+    if(errmsg){
+        const err = JSON.stringify({'status': 'error', 'msg': errmsg});
+        res.send(err);
+        
+    }else{
+
+        try{
+            conn = await pool.getConnection();
+            const result = await conn.query(
+                'SELECT uid FROM WEB_USER_INFO WHERE uid=(?)',[uid]);
+                
+            if(result.length == 0){
+                resMsg = JSON.stringify({'status': 'success', 'msg': '아이디: 사용가능한 id입니다.'});
+            }else{
+                resMsg = JSON.stringify({'status': 'error', 'msg': '아이디: 사용할 수 없는 id입니다. 다른 아이디를 입력해 주세요.'});
+            }
+            
+            await conn.release();
+            
+            return res.send(resMsg);
+            
+        }catch(err){
+            console.error(err);
+            
+            resMsg = JSON.stringify({'status': 'error', 'msg': err});
+
+            if(conn){
+                await conn.release();
+            }
+            
+            return res.status(500).send(resMsg);
+        }
+    }
+}
+
 module.exports = {
     login,
-    register
+    register,
+    checkDuplicateId
 };
