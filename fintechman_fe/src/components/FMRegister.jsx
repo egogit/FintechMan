@@ -56,10 +56,9 @@ function FMRegister(props) {
         axios.post(baseURL+'/checkDuplicateId',{
             uid: id,
         }).then((res) => {
-            if (res.data.status == 'error'){
-                setIdValidMsg("아이디: 사용할 수 없는 id입니다. 다른 아이디를 입력해 주세요.")
+            if (res.data.status === 'error'){
+                setIdValidMsg(res.data.msg)
                 setIsIdValid(false);
-                //errMsg = res.data.msg;  // TODO. 한글깨짐 현상 해결하고 서버에서 받은 메시지로 수정하기 
             }else{
                 setIdValidMsg("");
                 setIsIdValid(true);

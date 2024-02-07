@@ -8,9 +8,9 @@ const checkValidation = async (uid, password) => {
     let errmsg= '';
     
     if(!uid || uid.length > 41){
-      errmsg = 'À¯È¿ÇÏÁö ¾ÊÀº idÀÔ´Ï´Ù.'
+      errmsg = 'ì•„ì´ë””: ìœ íš¨í•˜ì§€ ì•Šì€ idì…ë‹ˆë‹¤.'
     }else if(!password || password.length > 16){
-      errmsg = 'À¯È¿ÇÏÁö ¾ÊÀº passwordÀÔ´Ï´Ù.'
+      errmsg = 'íŒ¨ìŠ¤ì›Œë“œ: ìœ íš¨í•˜ì§€ ì•Šì€ passwordì…ë‹ˆë‹¤.'
     }
     
     return errmsg;
@@ -36,19 +36,19 @@ const login = async (req, res) => {
                 'SELECT password FROM WEB_USER_INFO WHERE uid=(?)',[uid]);
                 
             if (result.length === 0){
-                resMsg = JSON.stringify({'status': 'error', 'msg': 'ÇØ´çÇÏ´Â ¾ÆÀÌµğ Á¤º¸°¡ ¾ø½À´Ï´Ù.'});
+                resMsg = JSON.stringify({'status': 'error', 'msg': 'í•´ë‹¹í•˜ëŠ” ì•„ì´ë”” ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.'});
             }else if(result.length === 1){
                 const hashpassword = result[0].password;
                 
                 const validation = bcrypt.compareSync(password, hashpassword);
                 
                 if(validation){
-                    resMsg = JSON.stringify({'status': 'success', 'msg': '·Î±×ÀÎµÇ¾ú½À´Ï´Ù.'});
+                    resMsg = JSON.stringify({'status': 'success', 'msg': 'ë¡œê·¸ì¸ë˜ì—ˆìŠµë‹ˆë‹¤.'});
                 }else{
-                    resMsg = JSON.stringify({'status': 'error', 'msg': 'ÇØ´çÇÏ´Â ¾ÆÀÌµğ Á¤º¸°¡ ¾ø½À´Ï´Ù.'});
+                    resMsg = JSON.stringify({'status': 'error', 'msg': 'í•´ë‹¹í•˜ëŠ” ì•„ì´ë”” ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.'});
                 }
             }else{
-                resMsg = JSON.stringify({'status': 'error', 'msg': 'Áßº¹µÈ ID°¡ Á¸ÀçÇÕ´Ï´Ù.'});
+                resMsg = JSON.stringify({'status': 'error', 'msg': 'ì¤‘ë³µëœ IDê°€ ì¡´ì¬í•©ë‹ˆë‹¤.'});
             }
             await conn.release();
             
@@ -91,9 +91,9 @@ const register = async(req, res) => {
                 'INSERT INTO WEB_USER_INFO(uid, password) VALUES(?, ?)',[uid, encPassword]);
                 
             if(result){
-                resMsg = JSON.stringify({'status': 'success', 'msg': 'È¸¿ø°¡ÀÔÀ» ¼º°øÇÏ¿´½À´Ï´Ù.'});
+                resMsg = JSON.stringify({'status': 'success', 'msg': 'íšŒì›ê°€ì…ì„ ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤.'});
             }else{
-                resMsg = JSON.stringify({'status': 'error', 'msg': 'È¸¿ø°¡ÀÔ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.'});
+                resMsg = JSON.stringify({'status': 'error', 'msg': 'íšŒì›ê°€ì…ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.'});
             }
             
             await conn.release();
@@ -135,9 +135,9 @@ const checkDuplicateId = async(req, res) => {
                 'SELECT uid FROM WEB_USER_INFO WHERE uid=(?)',[uid]);
                 
             if(result.length == 0){
-                resMsg = JSON.stringify({'status': 'success', 'msg': '¾ÆÀÌµğ: »ç¿ë°¡´ÉÇÑ idÀÔ´Ï´Ù.'});
+                resMsg = JSON.stringify({'status': 'success', 'msg': 'ì•„ì´ë””: ì‚¬ìš©ê°€ëŠ¥í•œ idì…ë‹ˆë‹¤.'});
             }else{
-                resMsg = JSON.stringify({'status': 'error', 'msg': '¾ÆÀÌµğ: »ç¿ëÇÒ ¼ö ¾ø´Â idÀÔ´Ï´Ù. ´Ù¸¥ ¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä.'});
+                resMsg = JSON.stringify({'status': 'error', 'msg': 'ì•„ì´ë””: ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” idì…ë‹ˆë‹¤. ë‹¤ë¥¸ ì•„ì´ë””ë¥¼ ì…ë ¥í•´ ì£¼ì„¸ìš”.'});
             }
             
             await conn.release();
