@@ -43,7 +43,13 @@ const login = async (req, res) => {
                 const validation = bcrypt.compareSync(password, hashpassword);
                 
                 if(validation){
-                    resMsg = JSON.stringify({'status': 'success', 'msg': '로그인되었습니다.'});
+                    req.session.user = uid;
+
+                    req.session.save(() => {
+
+                    })
+
+                    resMsg = JSON.stringify({'status': 'success', 'data':req.session.user, 'msg': '로그인되었습니다.'});
                 }else{
                     resMsg = JSON.stringify({'status': 'error', 'msg': '해당하는 아이디 정보가 없습니다.'});
                 }
@@ -158,8 +164,39 @@ const checkDuplicateId = async(req, res) => {
     }
 }
 
+const logout = async (req, res) => {
+    
+    let resMsg="";
+
+    if(!req.session.user){
+        resMsg = JSON.stringify({'status': 'error', 'msg': "세션이 존재하지 않습니다."});
+    }else{
+        req.session.destroy(err => {
+            if(err){
+                resMsg = JSON.stringify({'status': 'error', 'msg': "로그아웃 과정에서 문제가 발생하였습니다."});
+            }
+        });
+        resMsg = JSON.stringify({'status': 'success', 'msg': "로그아웃되었습니다."});
+    }
+
+    return res.send(resMsg);
+}
+
+const checkSession = async (req, res) => {
+
+    if(req.session.user){
+        resMsg = JSON.stringify({'status': 'success', 'msg': "세션이 존재합니다."});
+    }else{
+        resMsg = JSON.stringify({'status': 'error', 'msg': "세션이 존재하지 않습니다."});
+    }
+
+    return res.send(resMsg);
+}
+
 module.exports = {
     login,
     register,
-    checkDuplicateId
+    checkDuplicateId,
+    logout,
+    checkSession
 };

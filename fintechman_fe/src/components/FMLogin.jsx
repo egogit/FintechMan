@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
 import FMRegister from "./FMRegister";
 import logo from "../assets/icon/fintechman.png";
+import { useAuth } from './AuthContext';
 
 const LoginForm = styled.form`
     background-color: #303030;
@@ -54,10 +55,18 @@ function FMLogin(props){
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const { isAuthenticated, setIsAuthenticated} = useAuth();
+
+    axios.defaults.withCredentials = true;
 
     const baseURL ="http://localhost:4000/api/auth";
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate('/');
+        }
+    }, [isAuthenticated, navigate]);
 
     const changeId = (e) => {
         setId(e.target.value)
@@ -80,12 +89,19 @@ function FMLogin(props){
                 password: password
             }).then((res) => {
                 if (res.data.status === 'success'){
+                    setIsAuthenticated(true)
                     navigate('/');
                 }else{
+                    if(res.data.msg === '이미 로그인 세션이 존재합니다.'){
+                        setIsAuthenticated(true)
+                        navigate('/');
+                    }
+                    setIsAuthenticated(false);
                     alert(res.data.msg);
                 }
             })
             .catch((err) => {
+                setIsAuthenticated(false);
                 alert(err);
                 console.error(err);
             })

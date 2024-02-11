@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 import FMLogin from "../components/FMLogin";
+import { useAuth } from "../components/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const LoginContainer = styled.div`
     display: flex;
@@ -10,6 +13,15 @@ const LoginContainer = styled.div`
 `
 
 function Login(){
+    const {isAuthenticated} = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(isAuthenticated === true){
+            navigate('/')
+        }
+    });
+
     return(
         <LoginContainer>
             <FMLogin/>
