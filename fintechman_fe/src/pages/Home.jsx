@@ -30,9 +30,9 @@ function Home(props){
         <HomeContainer>
             <Header toggleSidebar={toggleSidebar}/>
             <FMContainer>
-                <FMSidebar isOpened={isOpened}/>
+                <FMSidebar $isOpened={isOpened}/>
                 {
-                    props.notFound ? <div>404 Not Found</div> : <FMContent isOpened={isOpened}/>
+                    props.notFound ? <div>404 Not Found</div> : <FMContent $isOpened={isOpened}/>
                 }
             </FMContainer>
             <Footer/>

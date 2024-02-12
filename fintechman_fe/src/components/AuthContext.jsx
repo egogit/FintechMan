@@ -14,7 +14,6 @@ export const AuthProvider = ({children}) => {
 
         axios.get(baseURL+'/checkSession')
             .then((res) => {
-            console.log(res);
             (res.data.status==='success') ? setIsAuthenticated(true) : setIsAuthenticated(false);
 
         }).catch((err) => {

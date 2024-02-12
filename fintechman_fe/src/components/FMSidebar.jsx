@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 const SideStyle = styled.div`
-    width: 200px;
+    width: '250px';
     height: 100%;
     background-color: #303030;
     transition: transform 0.5s ease; 
-    transform: ${props => props.isOpened ? 'translateX(0)' : 'translateX(-100%)'};
+    transform: ${props => props.$isOpened ? 'translateX(0)' : 'translateX(-100%)'};
+    visibility: ${props => props.$isOpened ? 'none' : 'visible'};
 `
 
 const SideGroupStyle = styled.div`
@@ -27,7 +28,7 @@ const SideMenuStyle = styled.div`
 function FMSidebar(props){
 
     return(
-        <SideStyle isOpened={props.isOpened}>
+        <SideStyle $isOpened={props.$isOpened}>
             <SideGroupStyle>
                 <SideTitleStyle>전체</SideTitleStyle>
                 <SideMenuStyle>전체포트폴리오</SideMenuStyle>

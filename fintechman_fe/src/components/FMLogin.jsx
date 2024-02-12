@@ -39,7 +39,7 @@ const ModalOverlay = styled.div`
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    display: ${({ showModal }) => (showModal ? "flex" : "none")};
+    display: ${({ $showModal }) => ($showModal ? "flex" : "none")};
     justify-content: center;
     align-items: center;
 `
@@ -144,9 +144,9 @@ function FMLogin(props){
                 </SubmitForm>
             </LoginForm>
 
-            <ModalOverlay showModal={showModal} onClick={overlayClickHandler}>
+            <ModalOverlay $showModal={showModal} onClick={overlayClickHandler}>
                 <ModalContent>
-                    <FMRegister closeModal={closeModal} showModal= {showModal} />
+                    <FMRegister closeModal={closeModal} $showModal= {showModal} />
                 </ModalContent>
             </ModalOverlay>
         </>

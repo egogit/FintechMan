@@ -133,7 +133,7 @@ function FMRegister(props) {
         setPassword("");
         setIdValidMsg("");
         setPasswordValidMsg("");
-    },[props.showModal])
+    },[props.$showModal])
 
     return (
         <RegisterForm>
